@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f47b4b3e-4c4c-404a-9048-3e84925487e6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/ASTPrinter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Expr.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Interpreter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Ion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Parser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/RuntimeError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Scanner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Stmt.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/Token.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/ion/TokenType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/pointed5th/toolchain/GenerateAST.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2dWwxOO92MLhKLcq6NTdtWdhKv5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "settings.editor.selected.configurable": "configurable.group.tools"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Ion">
+    <configuration name="GenerateAST" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.pointed5th.toolchain.GenerateAST" />
+      <module name="ion" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/java/com/pointed5th/ion" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pointed5th.toolchain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Ion" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.pointed5th.ion.Ion" />
+      <module name="ion" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pointed5th.ion.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PrintAST" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.pointed5th.ion.PrintAST" />
+      <module name="ion" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pointed5th.ion.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Ion" />
+      <item itemvalue="Application.PrintAST" />
+      <item itemvalue="Application.GenerateAST" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Ion" />
+        <item itemvalue="Application.GenerateAST" />
+        <item itemvalue="Application.PrintAST" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f47b4b3e-4c4c-404a-9048-3e84925487e6" name="Changes" comment="" />
+      <created>1710137388012</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1710137388012</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
