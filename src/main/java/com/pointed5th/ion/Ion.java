@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.format.SignStyle;
 import java.util.List;
 
 public class Ion {
@@ -24,7 +23,6 @@ public class Ion {
         }
     }
 
-
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
@@ -36,15 +34,23 @@ public class Ion {
         InputStreamReader input = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(input);
 
-        System.out.println("Welcome to the ion REPL");
+        System.out.println("Welcome to the ion REPL. Press Ctrl+C or type '.exit' to exit.");
 
         while (true) {
             System.out.print("> ");
             try {
                 String line = reader.readLine();
-                if (line == null) break;
-                run(line);
-                hasError = false;
+                switch (line) {
+                    case ".exit" -> System.exit(0);
+                    case null -> {
+                        System.out.println();
+                        System.exit(0);
+                    }
+                    default -> {
+                        run(line);
+                        hasError = false;
+                    }
+                }
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -52,11 +58,10 @@ public class Ion {
     }
 
     private static void run(String source) {
-        Scanner scanner = new Scanner(source);
-        List<Token> tokens = scanner.scan();
+        Lexer lexer = new Lexer(source);
+        List<Token> tokens = lexer.lex();
 
         Parser parser = new Parser(tokens);
-
         List<Stmt> statements = parser.parse();
 
         if (hasError) return;
@@ -64,12 +69,8 @@ public class Ion {
         interpreter.interpret(statements);
     }
 
-    static void error(int lint, String message) {
-        report(lint, "", message);
-    }
-
-    private static void report(int line, String where, String message) {
-        System.err.println("[line " + line + "] Error" + where + ": " + message);
+    static void error(int line, String message) {
+        report(line, "", message);
     }
 
     static void error(Token token, String msg) {
@@ -78,6 +79,10 @@ public class Ion {
         } else {
             report(token.line, "at '" + token.lexeme + "'", msg);
         }
+    }
+
+    private static void report(int line, String where, String message) {
+        System.err.println("[line " + line + "] Error" + where + ": " + message);
     }
 
     static void runtimeError(RuntimeError error) {

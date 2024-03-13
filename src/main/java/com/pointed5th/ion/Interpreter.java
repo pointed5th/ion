@@ -3,17 +3,15 @@ package com.pointed5th.ion;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
-    void interpret(List<Stmt> stmts) {
+    void interpret(List<Stmt> statements) {
         try {
-            for (Stmt stmt : stmts) {
+            for (Stmt stmt : statements) {
                 execute(stmt);
             }
         } catch (RuntimeError error) {
             Ion.runtimeError(error);
         }
     }
-
-
 
     private String stringify(Object object) {
         if (object == null) return "nil";
@@ -22,13 +20,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             String text = object.toString();
 
             if (text.endsWith(".0")) {
-                text = text.substring(0, text.length() -2);
+                text = text.substring(0, text.length() - 2);
             }
             return text;
         }
 
         return object.toString();
     }
+
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         Object left = evaluate(expr.left);
@@ -65,15 +64,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                     return left + (String) right;
                 }
 
-                // challenge 2 on pg. 109
-                // handle concatenation of string and number
-                if (left instanceof String && right instanceof Double) {
-                    return left + stringify(right);
-                }
-
-                if (left instanceof Double && right instanceof String) {
-                    return stringify(left) + right;
-                }
+//                if (left instanceof String && right instanceof Double) {
+//                    return left + stringify(right);
+//                }
+//
+//                if (left instanceof Double && right instanceof String) {
+//                    return stringify(left) + right;
+//                }
 
                 throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
             }

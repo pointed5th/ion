@@ -1,7 +1,17 @@
 ## ion
 
-`ion` is a dynamically typed language for developing healthcare systems.
+Dynamically typed language for developing healthcare systems.
 
+
+
+
+### Build
+
+REPL
+
+```bash
+mvn exec:java -Dexec.mainClass="com.pointed5th.ion.Ion"
+```
 
 ### Examples
 

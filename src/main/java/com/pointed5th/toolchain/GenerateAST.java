@@ -32,6 +32,7 @@ public class GenerateAST {
         String path = outputDir + "/" + baseName + ".java";
 
         PrintWriter writer = new PrintWriter(path, "UTF-8");
+
         writer.println(packageName);
         writer.println();
         writer.println("import java.util.List;");
