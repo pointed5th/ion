@@ -1,5 +1,7 @@
 package com.pointed5th.ion;
 
+import org.apache.commons.cli.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,14 +14,38 @@ public class Ion {
     private static final Interpreter interpreter = new Interpreter();
     static boolean hasError = false;
     static boolean hasRuntimeError = false;
-    public static void main(String[] args) throws IOException {
-        if (args.length > 1) {
-            System.out.println("Usage: java -jar ion.jar <input file>");
-            System.exit(64);
-        } else if (args.length == 1) {
-            runFile(args[0]);
-        } else {
+    static boolean debugMode = false;
+
+    public static void main(String[] args) throws ParseException, IOException {
+        Options options = new Options();
+        options.addOption("d", "debug", false, "Prints token and AST info");
+        options.addOption("h", "help", false, "Prints usage info");
+        options.addOption("v", "version", false, "Prints version info");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = parser.parse(options, args);
+
+        HelpFormatter formatter = new HelpFormatter();
+
+        if (cmd.hasOption("h")) {
+            formatter.printHelp("ion", options);
+            System.exit(0);
+        }
+
+        if (cmd.hasOption("v")) {
+            System.out.println("ion v1.0");
+            System.exit(0);
+        }
+
+        if (args.length == 0) {
             runPrompt();
+        }
+
+        if (args.length > 1) {
+            formatter.printHelp("ion", options);
+            System.exit(64);
+        } else {
+            runFile(args[0]);
         }
     }
 
@@ -67,6 +93,12 @@ public class Ion {
         if (hasError) return;
 
         interpreter.interpret(statements);
+
+        if (debugMode) {
+            for (Token token : tokens) {
+                System.out.println(token);
+            }
+        }
     }
 
     static void error(int line, String message) {
@@ -75,9 +107,9 @@ public class Ion {
 
     static void error(Token token, String msg) {
         if (token.type == TokenType.EOF) {
-            report(token.line, "at end", msg);
+            report(token.loc.line(), "at end", msg);
         } else {
-            report(token.line, "at '" + token.lexeme + "'", msg);
+            report(token.loc.line(), "at '" + token.lexeme + "'", msg);
         }
     }
 
@@ -87,7 +119,7 @@ public class Ion {
 
     static void runtimeError(RuntimeError error) {
         System.err.println(error.getMessage() +
-                "\n[line " + error.token.line + "]");
+                "\n[line " + error.token.loc.line() + "]");
         hasRuntimeError = true;
     }
 }

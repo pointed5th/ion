@@ -16,5 +16,8 @@ enum TokenType {
     AND, CLASS, ELSE, FALSE, FUNCTION, FOR, IF, NIL, OR,
     PRINT, RETURN, SUPER, THIS, TRUE, VAR, WHILE,
 
+    // FHIR-specific keywords
+    RESOURCE,
+
     EOF
 }

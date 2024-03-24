@@ -18,10 +18,34 @@ public class Parser {
         List<Stmt> statements = new ArrayList<>();
 
         while (!EOF()) {
-            statements.add(statement());
+            statements.add(declaration());
         }
 
         return statements;
+    }
+
+    private Stmt declaration() {
+        try {
+            if (match(VAR)) return varDeclaration();
+            return statement();
+        } catch (ParseError error) {
+            synchronize();
+            return null;
+        }
+    }
+
+    private Stmt varDeclaration() {
+        Token name = consume(IDENTIFIER, "Expected variable name.");
+
+        Expr initializer = null;
+
+        if (match(EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(SEMICOLON, "Expected ';' after variable declaration.");
+
+        return new Stmt.Var(name, initializer);
     }
 
     private Stmt statement()  {
@@ -31,19 +55,34 @@ public class Parser {
 
     private Stmt printStatement() {
         Expr value = expression();
-        consume(SEMICOLON, "Expect ';' after value");
+        consume(SEMICOLON, "Expected ';' after value");
         return new Stmt.Print(value);
     }
 
     private Stmt expressionStatement() {
         Expr expr = expression();
-        consume(SEMICOLON, "Expect ';' expression.");
+        consume(SEMICOLON, "Expected ';' expression.");
         return new Stmt.Expression(expr);
     }
 
     private Expr expression() {
-        return equality();
+        return assignment();
      }
+    private Expr assignment() {
+        Expr expr = equality();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable)expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
+        }
+        return expr;
+    }
 
     private Expr equality() {
         Expr expr = comparison();
@@ -108,6 +147,10 @@ public class Parser {
             return new Expr.Literal(previous().literal);
         }
 
+        if (match(IDENTIFIER)) {
+            return new Expr.Variable(previous());
+        }
+
         if (match(LEFT_PAREN)) {
             Expr expr = expression();
             consume(RIGHT_PAREN, "Expected ')' after expression.");
@@ -159,6 +202,7 @@ public class Parser {
         return new ParseError();
     }
 
+    // move forward until we find a statement boundary
     private void synchronize()  {
         next();
         while (!EOF()) {

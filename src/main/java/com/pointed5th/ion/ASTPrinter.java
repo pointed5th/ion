@@ -7,6 +7,11 @@ public class ASTPrinter implements Expr.Visitor<String>{
     }
 
     @Override
+    public String visitAssignExpr(Expr.Assign expr) {
+        return null;
+    }
+
+    @Override
     public String visitBinaryExpr(Expr.Binary expr) {
         return parenthesize(expr.operator.lexeme, expr.left, expr.right);
     }
@@ -26,6 +31,12 @@ public class ASTPrinter implements Expr.Visitor<String>{
     public String visitUnaryExpr(Expr.Unary expr) {
         return parenthesize(expr.operator.lexeme, expr.right);
     }
+
+    @Override
+    public String visitVariableExpr(Expr.Variable expr) {
+        return null;
+    }
+
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 
@@ -42,11 +53,15 @@ public class ASTPrinter implements Expr.Visitor<String>{
 
     public static void main(String[] args) {
         // (* (- 123) (group 45.67))
+
+        Loc loc1 = new Loc(1, 1, 1);
+        Loc loc2 = new Loc(1, 2, 2);
+
         Expr expr  = new Expr.Binary(
                 new Expr.Unary(
-                        new Token(TokenType.MINUS, "-", null, 1),
+                        new Token(TokenType.MINUS, "-", null, loc1),
                         new Expr.Literal(123)),
-                new Token(TokenType.STAR, "*", null, 1),
+                new Token(TokenType.STAR, "*", null, loc2),
                 new Expr.Grouping(new Expr.Literal(45.67))
         );
 

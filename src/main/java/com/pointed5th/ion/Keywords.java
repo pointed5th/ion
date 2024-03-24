@@ -24,6 +24,9 @@ public  class Keywords {
         keywords.put("while", TokenType.WHILE);
         keywords.put("nil", TokenType.NIL);
         keywords.put("print", TokenType.PRINT);
+
+        // FHIR-specific keywords
+        keywords.put("Patient", TokenType.RESOURCE);
     }
 
     public static TokenType get(String key) {

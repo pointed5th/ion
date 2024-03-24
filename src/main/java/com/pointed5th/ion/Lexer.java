@@ -23,7 +23,9 @@ public class Lexer {
             scan();
         }
 
-        tokens.add(new Token(EOF, "", null, line));
+        Loc loc = new Loc(line, current, current);
+        Token EOF = new Token(TokenType.EOF, "", null, loc);
+        tokens.add(EOF);
         return tokens;
     }
 
@@ -31,37 +33,30 @@ public class Lexer {
         char current = seek();
 
         switch (current) {
-            case '(' -> consume(LEFT_PAREN);
-            case ')' -> consume(RIGHT_PAREN);
-            case '{' -> consume(LEFT_BRACE);
-            case '}' -> consume(RIGHT_BRACE);
-            case ',' -> consume(COMMA);
-            case '.' -> consume(DOT);
-            case '-' -> consume(MINUS);
-            case '+' -> consume(PLUS);
-            case ';' -> consume(SEMICOLON);
-            case '*' -> consume(STAR);
+            case '(' -> consume(LEFT_PAREN, "(");
+            case ')' -> consume(RIGHT_PAREN, ")");
+            case '{' -> consume(LEFT_BRACE, "{");
+            case '}' -> consume(RIGHT_BRACE, "}");
+            case ',' -> consume(COMMA, ",");
+            case '.' -> consume(DOT, ".");
+            case '-' -> consume(MINUS, "-");
+            case '+' -> consume(PLUS, "+");
+            case ';' -> consume(SEMICOLON, ";");
+            case '*' -> consume(STAR, "*");
             case '!' -> consume(match('=') ? BANG_EQUAL : BANG);
             case '=' -> consume(match('=') ? EQUAL_EQUAL : EQUAL);
             case '<' -> consume(match('=') ? LESS_EQUAL : LESS);
             case '>' -> consume(match('=') ? GREATER_EQUAL : GREATER);
             case '/' -> {
                 if (match('/')) {
-                    // consume comment
                     while (peek() != '\n' && !EOF()) seek();
                 } else {
                     consume(SLASH);
                 }
             }
-            // ignore whitespace
             case ' ', '\r', '\t' -> {}
             case '\n' -> line++;
             case '"' -> string();
-            case 'o' -> {
-                if (match('r')) {
-                    consume(OR);
-                }
-            }
             default -> {
                 if (isDigit(current)) {
                     number();
@@ -76,10 +71,13 @@ public class Lexer {
 
     private void identifier() {
         while (isAlphaNumeric(peek())) seek();
+
         String text = source.substring(start, current);
         TokenType type = Keywords.get(text);
+
         if (type == null) type = IDENTIFIER;
-        consume(type);
+
+        consume(type, text);
     }
 
     private boolean isAlpha(char c) {
@@ -101,6 +99,7 @@ public class Lexer {
             seek();
             while (isDigit(peek())) seek();
         }
+
         consume(NUMBER, Double.parseDouble(source.substring(start, current)));
     }
 
@@ -118,10 +117,6 @@ public class Lexer {
         seek();
 
         String value = source.substring(start + 1, current - 1);
-
-        if (value.length() > 255) {
-            Ion.error(line, "string length exceeds 255 characters");
-        }
 
         consume(STRING, value);
     }
@@ -154,7 +149,9 @@ public class Lexer {
 
     private void consume(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        tokens.add(new Token(type, text, literal, line));
+        Loc loc = new Loc(line, start, text.length());
+        Token token = new Token(type, text, literal, loc);
+        tokens.add(token);
     }
 
     private boolean EOF() {

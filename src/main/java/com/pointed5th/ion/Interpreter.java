@@ -3,6 +3,7 @@ package com.pointed5th.ion;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    private Environment environment = new Environment();
     void interpret(List<Stmt> statements) {
         try {
             for (Stmt stmt : statements) {
@@ -26,6 +27,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
 
         return object.toString();
+    }
+
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+
+        environment.d
     }
 
     @Override
@@ -64,15 +72,15 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                     return left + (String) right;
                 }
 
-//                if (left instanceof String && right instanceof Double) {
-//                    return left + stringify(right);
-//                }
-//
-//                if (left instanceof Double && right instanceof String) {
-//                    return stringify(left) + right;
-//                }
+                if (left instanceof String && right instanceof Double) {
+                    return left + stringify(right);
+                }
 
-                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
+                if (left instanceof Double && right instanceof String) {
+                    return stringify(left) + right;
+                }
+
+                throw new RuntimeError(expr.operator, "Invalid operands");
             }
 
             case GREATER -> {
@@ -141,6 +149,36 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Object visitVariableExpr(Expr.Variable expr) {
+        return environment.get(expr.name);
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        // set uninitialized variables to nil
+        Object value = null;
+
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+
     private boolean isTruthy(Object object)  {
         if (object == null)  return false;
         if (object instanceof Boolean)  return (boolean) object;
@@ -151,20 +189,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return expr.accept(this);
     }
 
-    private void execute(Stmt stmt) {
+    private void execute(Stmt                                                                                          stmt) {
         stmt.accept(this);
-    }
-
-    @Override
-    public Void visitExpressionStmt(Stmt.Expression stmt) {
-        evaluate(stmt.expression);
-        return null;
-    }
-
-    @Override
-    public Void visitPrintStmt(Stmt.Print stmt) {
-        Object value = evaluate(stmt.expression);
-        System.out.println(stringify(value));
-        return null;
     }
 }
